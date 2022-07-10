@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="contentbody">
+        <div class="banner">
+            <h2>Current Task List</h2>
+            <a href="/"><button>Add Task</button></a><!--takes the user back to the home page if they want to enter another task-->
+        </div>
+        <div id="listbody">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Task</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for todo in todos %}<!--loops through the list variable where the task names are saved-->
+                    <tr>
+                        <td>{{ todo }}</td> <!--displays all task names if present in the list variable (passed from route function SHOW_LIST todos=todos-->
+                        <td>
+                            <a href="/destroy/task/{{todo}}">Delete</a> <!--reference the todos element by name and passed as a route variable in the destroy route-->
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% with messages = get_flashed_messages(category_filter=['empty_list']) %}<!--line 30 in server.py-->
+                {% if messages %}
+                <div id="emptylist">
+                    {% for message in messages %}
+                        <h2>Nothing to Do!</h2><!--only displayed if the list variable is empty-->
+                        <h3>I mean, it's 5 o'clock somewhere...</h3>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+</body>
+</html>
